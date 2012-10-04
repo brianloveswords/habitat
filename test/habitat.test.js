@@ -108,3 +108,11 @@ test('habitat#get: array parsing', function (t) {
   t.same(env.get('admins').indexOf('you@example.com'), 1);
   t.end();
 });
+
+
+test('habitat#get: defaults', function (t) {
+  var env = new habitat('noexist');
+  t.same(env.get('port', 3000), 3000);
+  t.same(env.get('yayay'), undefined);
+  t.end();
+});

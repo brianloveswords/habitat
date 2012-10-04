@@ -55,7 +55,7 @@ var env = new habitat('airsupport', { port: 3000 })
 var port = env.get('port');
 ```
 
-## habitat#get(key)
+## habitat#get(key, default)
 
 Gets a key from the environment. Automatically prefixes with the
 `prefix` passed to the constructor, if necessary.
@@ -71,6 +71,9 @@ var env = new habitat('app');
 var admins = env.get('admins');
 console.log(admins.indexOf('you@example.com')) // 1
 ```
+
+If a `default` is passed, if the key is undefined in either the env or
+the constructor-set defaults, it will fall back to that.
 
 ## habitat#set(key, value)
 

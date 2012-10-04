@@ -24,12 +24,13 @@ habitat.prototype.setDefaults = function setDefaults(defaults) {
  * in at construction time.
  *
  * @param {String} key The key to lookup in the environment
+ * @param {Mixed} someDefault
  * @return {Mixed} Result of the key lookup
  */
 
-habitat.prototype.get = function get(key) {
+habitat.prototype.get = function get(key, someDefault) {
   var envkey = this.envkey(key);
-  var value = process.env[envkey];
+  var value = process.env[envkey] || someDefault;
   return habitat.parse(value);
 };
 
