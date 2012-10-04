@@ -67,7 +67,7 @@ like a `boolean`, `number` or `json`, so you can do things like this:
 exports APP_ADMINS='["me@example.com", "you@example.com"]';
 ```
 ```js
-var env = habitat('app');
+var env = new habitat('app');
 var admins = env.get('admins');
 console.log(admins.indexOf('you@example.com')) // 1
 ```
