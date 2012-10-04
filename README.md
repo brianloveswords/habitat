@@ -99,12 +99,12 @@ var env = new habitat('airsupport', {
   port: 3000
 });
 
-// sync 
 var tempEnv = {
   host: 'lolcathost'
   port: 5000
 };
 
+// sync  
 env.temp(tempEnv, function() {
   console.log(env.get('host')) // "lolcathost"
   console.log(process.env['AIRSUPPORT_HOST']) // "lolcathost"
@@ -113,7 +113,7 @@ env.temp(tempEnv, function() {
 console.log(env.get('host')) // "airsupport.io"
 
 // async
-env.temp({tempEnv, function(done)
+env.temp(tempEnv, function(done)
   process.nextTick(function(){
     console.log(env.get('port')) // 5000
     done();
