@@ -55,7 +55,7 @@ var env = new habitat('airsupport', { port: 3000 })
 var port = env.get('port');
 ```
 
-## habitat#get(key, default)
+## habitat#get(key, [*default*])
 
 Gets a key from the environment. Automatically prefixes with the
 `prefix` passed to the constructor, if necessary.
