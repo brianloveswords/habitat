@@ -57,7 +57,20 @@ var port = env.get('port');
 
 ## habitat#get(key)
 
-Gets a key from the environment. Automatically prefixes with the `prefix` passed to the constructor, if necessary.
+Gets a key from the environment. Automatically prefixes with the
+`prefix` passed to the constructor, if necessary.
+
+`habitat#get` will also try to do some parsing of the value if it looks
+like a `boolean`, `number` or `json`, so you can do things like this:
+
+```bash
+exports APP_ADMINS='["me@example.com", "you@example.com"]';
+```
+```js
+var env = habitat('app');
+var admins = env.get('admins');
+console.log(admins.indexOf('you@example.com')) // 1
+```
 
 ## habitat#set(key, value)
 

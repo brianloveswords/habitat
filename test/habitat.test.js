@@ -88,3 +88,23 @@ test('habitat#unset', function (t) {
   t.notOk(env.get('wut'), 'should not get a result');
   t.end();
 });
+
+test('habitat.parse: parse potential things', function (t) {
+  t.same(typeof habitat.parse('true'), 'boolean');
+  t.same(typeof habitat.parse('false'), 'boolean');
+  t.same(typeof habitat.parse('3000'), 'number');
+  t.same(typeof habitat.parse('12.0'), 'number');
+  t.same(typeof habitat.parse('{"hi": "hello"}'), 'object');
+  t.same(habitat.parse('{"hi": "hello"}').hi, 'hello');
+  t.same(typeof habitat.parse('[1,2,3]'), 'object');
+  t.same(habitat.parse('[1,2,3]')[2], 3);
+  t.same(typeof habitat.parse('12/>SDc80'), 'string');
+  t.end();
+});
+
+test('habitat#get: array parsing', function (t) {
+  process.env['HABITAT_ADMINS'] = '["me@example.com", "you@example.com"]';
+  var env = new habitat('habitat');
+  t.same(env.get('admins').indexOf('you@example.com'), 1);
+  t.end();
+});

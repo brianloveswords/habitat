@@ -29,8 +29,32 @@ habitat.prototype.setDefaults = function setDefaults(defaults) {
 
 habitat.prototype.get = function get(key) {
   var envkey = this.envkey(key);
-  return process.env[envkey];
+  var value = process.env[envkey];
+  return habitat.parse(value);
 };
+
+/**
+ * Attempt to nativize things coming from the environment.
+ *
+ * @param {String} thing The string coming in from the environment
+ * @return {Mixed} A native object if parseable, otherwise raw string
+ */
+
+habitat.parse = function parse(thing) {
+  var bool = /^(true|false)$/;
+  var number = /^\d+(\.\d+)?$/;
+  var json = /^(\{.*?\})|(\[.*?\])$/;
+  if (bool.test(thing))
+    return thing === 'true';
+  if (number.test(thing))
+    return parseInt(thing, 10);
+  if (json.test(thing)) {
+    try { return JSON.parse(thing) }
+    catch(err) { return thing }
+  }
+  return thing;
+};
+
 
 /**
  * Set a value on the environment
