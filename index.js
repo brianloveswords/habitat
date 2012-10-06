@@ -31,7 +31,11 @@ habitat.prototype.setDefaults = function setDefaults(defaults) {
 habitat.prototype.get = function get(key, someDefault) {
   var envkey = this.envkey(key);
   var value = process.env[envkey] || someDefault;
-  return habitat.parse(value);
+  if (typeof value !== 'undefined')
+    return habitat.parse(value);
+  value = this.getAsObject(key);
+  if (Object.keys(value).length)
+    return value;
 };
 
 /**
@@ -131,18 +135,40 @@ habitat.prototype.envkey = function envkey(key) {
 
 habitat.prototype.all = function all() {
   var prefix = this.prefix;
-  var keys = Object.keys(process.env);
   if (!prefix) return process.env;
-  return keys.reduce(function (accum, key) {
-    if (key.indexOf(prefix) === 0)
-      accum.push(key)
-    return accum;
-  }, []).reduce(function (obj, key) {
+  var keys = this.rawKeys();
+  return keys.reduce(function (obj, key) {
     var lowerKey = key.replace(prefix + '_', '').toLowerCase();
     obj[lowerKey] = habitat.parse(process.env[key]);
     return obj;
   }, {});
 };
+
+
+habitat.prototype.rawKeys = function rawKeys() {
+  var prefix = this.prefix;
+  var keys = Object.keys(process.env);
+  if (!prefix) return keys;
+  return keys.reduce(function (accum, key) {
+    if (key.indexOf(prefix) === 0)
+      accum.push(key);
+    return accum;
+  }, []);
+};
+
+/**
+ * Get an object by key
+ *
+ * @param {String} keyPrefix
+ * @return {Object}
+ */
+
+habitat.prototype.getAsObject = function getAsObject(keyPrefix) {
+  var envkey = this.envkey(keyPrefix);
+  var env = new habitat(envkey);
+  return env.all();
+};
+
 
 
 /**

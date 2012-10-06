@@ -126,3 +126,35 @@ test('habitat#all', function (t) {
   t.same(obj.nope, 'naw');
   t.end();
 });
+
+test('habitat#rawKeys', function (t) {
+  process.env['OTHERAPP_HOST'] = 'not-local-host';
+  process.env['RAWKEYS_HOST'] = 'localhost';
+  process.env['RAWKEYS_PORT'] = 3000;
+  var env = new habitat('rawkeys');
+  t.same(env.rawKeys(), ['RAWKEYS_HOST', 'RAWKEYS_PORT'])
+  t.end();
+});
+
+test('habitat#getAsObject', function (t) {
+  process.env['APP_REDIS_HOST'] = 'localhost';
+  process.env['APP_REDIS_PORT'] = 3000;
+  var env = new habitat('app');
+  var obj = env.getAsObject('redis');
+  t.same(obj.host, 'localhost');
+  t.same(obj.port, 3000);
+  t.end();
+});
+
+test('habitat#get: should try `getAsObject` if no value is found', function (t) {
+  process.env['APP_REDIS_HOST'] = 'localhost';
+  process.env['APP_REDIS_PORT'] = 3000;
+  var env = new habitat('app');
+  var obj = env.get('redis');
+  t.same(obj.host, 'localhost');
+  t.same(obj.port, 3000);
+
+  var value = env.get('nonexistent');
+  t.notOk(value, 'should not have a value');
+  t.end();
+});

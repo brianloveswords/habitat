@@ -64,7 +64,7 @@ Gets a key from the environment. Automatically prefixes with the
 like a `boolean`, `number` or `json`, so you can do things like this:
 
 ```bash
-exports APP_ADMINS='["me@example.com", "you@example.com"]';
+exports APP_ADMINS='["me@example.com", "you@example.com"]'
 ```
 ```js
 var env = new habitat('app');
@@ -74,6 +74,22 @@ console.log(admins.indexOf('you@example.com')) // 1
 
 If a `default` is passed, if the key is undefined in either the env or
 the constructor-set defaults, it will fall back to that.
+
+You can also do stuff like this:
+
+```bash
+exports APP_DB="redis"
+exports APP_REDIS_HOST="127.0.0.1"
+exports APP_REDIS_PORT=6379
+```
+```js
+var env = new habitat('app');
+var db = env.get('db');
+var options = env.get('redis');
+console.log(db); // "redis"
+console.log(options.host); // "127.0.0.1"
+console.log(options.port); // 6379
+```
 
 ## habitat#set(key, value)
 
