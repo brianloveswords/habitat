@@ -33,7 +33,7 @@ export AIRSUPPORT_PORT=3000
 export AIRSUPPORT_WEBSOCKETS=true
 ```
 
-In this case, your prefix will be `'airsupport'` -- the prefix will be
+In this case, you would use  `new habitat('airsupport')` -- the prefix will be
 auto-capitalized because only barbarians use lowercase letters in their
 environment variables.
 
