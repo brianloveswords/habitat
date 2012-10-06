@@ -123,6 +123,27 @@ habitat.prototype.envkey = function envkey(key) {
   return envkey;
 };
 
+/**
+ * Get an object with all of the stuff in the environment
+ *
+ * @return {Object}
+ */
+
+habitat.prototype.all = function all() {
+  var prefix = this.prefix;
+  var keys = Object.keys(process.env);
+  if (!prefix) return process.env;
+  return keys.reduce(function (accum, key) {
+    if (key.indexOf(prefix) === 0)
+      accum.push(key)
+    return accum;
+  }, []).reduce(function (obj, key) {
+    var lowerKey = key.replace(prefix + '_', '').toLowerCase();
+    obj[lowerKey] = habitat.parse(process.env[key]);
+    return obj;
+  }, {});
+};
+
 
 /**
  * Get a key from the environment without a prefix.

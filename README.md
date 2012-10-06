@@ -83,6 +83,24 @@ Sets an environment variable, with prefix if passed.
 
 Unsets an environment variable
 
+## habitat#all()
+
+Get an object with all of the things in the environment.
+
+Example:
+
+```bash
+export APP_HOST='localhost'
+export APP_PORT=3000
+export APP_PROTO=http
+```
+```js
+var env = new habitat('app');
+var obj = env.all();
+
+console.log(obj.host); // 'localhost'
+```
+
 ## habitat#temp(object, callback)
 
 Temporarily overrides environment variables with values from `object`.

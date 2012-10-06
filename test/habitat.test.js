@@ -116,3 +116,13 @@ test('habitat#get: defaults', function (t) {
   t.same(env.get('yayay'), undefined);
   t.end();
 });
+
+test('habitat#all', function (t) {
+  process.env['HABITAT_YEP'] = 'yeah';
+  process.env['HABITAT_NOPE'] = 'naw';
+  var env = new habitat('habitat');
+  var obj = env.all();
+  t.same(obj.yep, 'yeah');
+  t.same(obj.nope, 'naw');
+  t.end();
+});
