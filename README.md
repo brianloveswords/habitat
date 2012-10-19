@@ -105,6 +105,36 @@ var env = new habitat('app');
 console.log(env.get('someLongKey')) // 'great'
 ```
 
+## habitat.get(key)
+
+You can also use `get` directly from the habitat objects to get unprefixed things from the environment.
+
+```js
+var path = habitat.get('path');
+var nodeEnv = habitat.get('nodeEnv');
+```
+
+## habitat.load([*pathToEnvFile*])
+Try to load a set of environment variables from a file. Will **not**
+overwrite existing environment variables if there is a conflict.
+
+```bash
+# /some/directory/.env
+# The leading `export` is optional.
+# Useful if you want to be able to also `source /some/directory/.env`
+
+export PARAMETER_ONE=one
+export PARAMETER_TWO=two
+```
+
+```
+habitat.load('/some/directory/.env'); // returns true on success
+console.dir(habitat.get('parameter')); // { one: 'one', two: 'two' }
+```
+
+`pathToEnvFile` defaults to `'.env'`, which will just look for a .env
+file in the current working directory.
+
 ## habitat#set(key, value)
 
 Sets an environment variable, with prefix if passed.

@@ -1,3 +1,5 @@
+var fs = require('fs');
+
 function habitat(prefix, defaults) {
   if (!(this instanceof habitat))
     return new habitat(prefix);
@@ -147,7 +149,6 @@ habitat.prototype.all = function all() {
   }, {});
 };
 
-
 habitat.prototype.rawKeys = function rawKeys() {
   var prefix = this.prefix;
   var keys = Object.keys(process.env);
@@ -172,16 +173,41 @@ habitat.prototype.getAsObject = function getAsObject(keyPrefix) {
   return env.all();
 };
 
-
-
 /**
  * Get a key from the environment without a prefix.
  *
  * @see habitat#get
  */
 
-habitat.get = function get(value) {
-  return (new habitat().get(value))
+habitat.get = function get() {
+  var env = new habitat();
+  return env.get.apply(env, arguments)
+};
+
+/**
+ * Load some things from an env file into the environment.
+ *
+ * @param {String} path The path to the environment file.
+ * @return {Boolean} true if able to load, false otherwise.
+ */
+
+habitat.load = function load(path) {
+  path = path || '.env';
+  if (!fs.existsSync(path))
+    return false;
+  var exports = fs.readFileSync(path).toString().split('\n');
+  exports.map(function (param) {
+    var match = param.replace(/^export /i, '').match(/(.+?)=(.*)/);
+    var key = match[1];
+    var value = match[2];
+    if ((match = value.match(/^(?:'|")(.*)(?:'|")$/)))
+      value = match[1];
+    return { key: key, value: value };
+  }).forEach(function (param) {
+    if (process.env[param.key]) return;
+    process.env[param.key] = param.value;
+  });
+  return true;
 };
 
 /**

@@ -169,3 +169,11 @@ test('habitat#get: should try to expand camelcase', function (t) {
   t.same(port, 3000);
   t.end();
 });
+
+test('habitat.load: load some shit in from a file', function (t) {
+  var path = require('path').join(__dirname, '.env');
+  habitat.load(path);
+  t.same(process.env['PARAMETER_ONE'], 'one=1');
+  t.same(process.env['PARAMETER_TWO'], 'two');
+  t.end();
+});
