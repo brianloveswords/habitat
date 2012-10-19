@@ -1,4 +1,5 @@
 # habitat [![Build Status](https://secure.travis-ci.org/brianloveswords/habitat.png)](http://travis-ci.org/brianloveswords/habitat)
+## Version 0.3.0
 
 Library for managing your environment vars.
 
@@ -28,7 +29,7 @@ your app is called `airsupport`, it's probably good to namespace your
 environment variables like so:
 
 ```bash
-export AIRSUPPORT_HOST=lolcathost
+export AIRSUPPORT_HOST='lolcathost'
 export AIRSUPPORT_PORT=3000
 export AIRSUPPORT_WEBSOCKETS=true
 ```
@@ -64,7 +65,7 @@ Gets a key from the environment. Automatically prefixes with the
 like a `boolean`, `number` or `json`, so you can do things like this:
 
 ```bash
-exports APP_ADMINS='["me@example.com", "you@example.com"]'
+export APP_ADMINS='["me@example.com", "you@example.com"]'
 ```
 ```js
 var env = new habitat('app');
@@ -75,20 +76,33 @@ console.log(admins.indexOf('you@example.com')) // 1
 If a `default` is passed, if the key is undefined in either the env or
 the constructor-set defaults, it will fall back to that.
 
-You can also do stuff like this:
+### Getting objects
+`get` will automatically return objects if you take advantage of common prefixing:
 
 ```bash
-exports APP_DB="redis"
-exports APP_REDIS_HOST="127.0.0.1"
-exports APP_REDIS_PORT=6379
+export APP_DB='redis'
+export APP_REDIS_HOST='127.0.0.1'
+export APP_REDIS_PORT=6379
 ```
+
 ```js
 var env = new habitat('app');
 var db = env.get('db');
-var options = env.get('redis');
-console.log(db); // "redis"
-console.log(options.host); // "127.0.0.1"
+var options = env.get(db);
+console.log(options.host); // '127.0.0.1'
 console.log(options.port); // 6379
+```
+
+### Getting keys using camelCase
+You can also use camelcase instead of underscores if you want, habitat's got your back.
+
+```bash
+export APP_SOME_LONG_KEY='great'
+```
+
+```js
+var env = new habitat('app');
+console.log(env.get('someLongKey')) // 'great'
 ```
 
 ## habitat#set(key, value)

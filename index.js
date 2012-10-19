@@ -29,6 +29,9 @@ habitat.prototype.setDefaults = function setDefaults(defaults) {
  */
 
 habitat.prototype.get = function get(key, someDefault) {
+  if (key.match(/[a-z]+[A-Z]/))
+    return this.get(fromCamelCase(key));
+
   var envkey = this.envkey(key);
   var value = process.env[envkey] || someDefault;
   if (typeof value !== 'undefined')
@@ -181,8 +184,26 @@ habitat.get = function get(value) {
   return (new habitat().get(value))
 };
 
+/**
+ * Shortcut for Object.keys(obj).forEach(fn);
+ */
+
 function eachKey(obj, fn) {
   return Object.keys(obj).forEach(fn);
 }
+
+/**
+ * Convert a camelcased string to an underscored string
+ *
+ * @param {String} input
+ * @return {String} underscored string
+ */
+
+function fromCamelCase(input) {
+  var expression = /([a-z])([A-Z])/g;
+  return input.replace(expression, function (_, lower, upper) {
+    return lower + '_' + upper.toLowerCase();
+  });
+};
 
 module.exports = habitat;

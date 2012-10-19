@@ -158,3 +158,14 @@ test('habitat#get: should try `getAsObject` if no value is found', function (t) 
   t.notOk(value, 'should not have a value');
   t.end();
 });
+
+test('habitat#get: should try to expand camelcase', function (t) {
+  process.env['APP_REDIS_HOST'] = 'localhost';
+  process.env['APP_REDIS_PORT'] = 3000;
+  var env = new habitat('app');
+  var host = env.get('redisHost');
+  var port = env.get('redisPort');
+  t.same(host, 'localhost');
+  t.same(port, 3000);
+  t.end();
+});
