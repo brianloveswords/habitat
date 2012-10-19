@@ -38,21 +38,12 @@ In this case, you would use  `new habitat('airsupport')` -- the prefix will be
 auto-capitalized because only barbarians use lowercase letters in their
 environment variables.
 
-Note that you don't have to pass in a prefix, if you're crazy like
-that. Keys will be looked up (after capitalization) straight from the
-env:
-
-```js
-var env = new habitat;
-var path= env.get('path'); 
-```
-
 `defaults` is an object representing the defaults if a key cannot be
 found in the environment. This should be used sparingly.
 
 ```js
-var env = new habitat('airsupport', { port: 3000 })
-// will try the environment first, then fall back to 3000
+var env = new habitat('airsupport', { port: 1024 })
+// will try the environment first, then fall back to 1024
 var port = env.get('port');
 ```
 
