@@ -120,7 +120,7 @@ export PARAMETER_ONE=one
 export PARAMETER_TWO=two
 ```
 
-```
+```js
 habitat.load('/some/directory/.env'); // returns true on success
 console.dir(habitat.get('parameter')); // { one: 'one', two: 'two' }
 ```
