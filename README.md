@@ -85,7 +85,8 @@ console.log(options.port); // 6379
 ```
 
 ### Getting keys using camelCase
-You can also use camelcase instead of underscores if you want, habitat's got your back.
+You can also use camelcase instead of underscores if you want, habitat's
+got your back.
 
 ```bash
 export APP_SOME_LONG_KEY='great'
@@ -98,7 +99,8 @@ console.log(env.get('someLongKey')) // 'great'
 
 ## habitat.get(key)
 
-You can also use `get` directly from the habitat objects to get unprefixed things from the environment.
+You can also use `get` directly from the habitat object to get
+unprefixed things from the environment.
 
 ```js
 var path = habitat.get('path');
