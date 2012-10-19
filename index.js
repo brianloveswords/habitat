@@ -1,4 +1,5 @@
 var fs = require('fs');
+var pathutil = require('path');
 
 function habitat(prefix, defaults) {
   if (!(this instanceof habitat))
@@ -193,7 +194,7 @@ habitat.get = function get() {
 
 habitat.load = function load(path) {
   path = path || '.env';
-  if (!fs.existsSync(path))
+  if (!fileExists(path))
     return false;
   var exports = fs.readFileSync(path).toString().split('\n');
   exports.map(function (param) {
@@ -230,6 +231,15 @@ function fromCamelCase(input) {
   return input.replace(expression, function (_, lower, upper) {
     return lower + '_' + upper.toLowerCase();
   });
-};
+}
+
+/**
+ * Check file existence.
+ * For supporting both node 0.6 and node 0.8
+ */
+
+function fileExists(path) {
+  return (fs.existsSync || pathutil.existsSync)(path);
+}
 
 module.exports = habitat;
