@@ -1,5 +1,5 @@
 # habitat [![Build Status](https://secure.travis-ci.org/brianloveswords/habitat.png)](http://travis-ci.org/brianloveswords/habitat)
-## Version 0.3.2
+## Version 0.4.0
 
 Library for managing your environment vars.
 
