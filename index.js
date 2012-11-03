@@ -32,16 +32,26 @@ habitat.prototype.setDefaults = function setDefaults(defaults) {
  */
 
 habitat.prototype.get = function get(key, someDefault) {
+  var value, envkey;
   if (key.match(/[a-z]+[A-Z]/))
     return this.get(fromCamelCase(key));
 
-  var envkey = this.envkey(key);
-  var value = process.env[envkey] || someDefault;
+  envkey = this.envkey(key);
+  value = process.env[envkey];
+
+  // try straight up
   if (typeof value !== 'undefined')
     return habitat.parse(value);
+
+  // try as an object
   value = this.getAsObject(key);
-  if (Object.keys(value).length)
-    return value;
+  if (typeof value !== 'undefined') {
+    if (Object.keys(value).length)
+      return value;
+  }
+
+  // fallback
+  return someDefault;
 };
 
 /**

@@ -159,6 +159,16 @@ test('habitat#get: should try `getAsObject` if no value is found', function (t) 
   t.end();
 });
 
+test('habitat#get: should not use default when there is a valid obj', function (t) {
+  process.env['APP_REDIS_HOST'] = 'localhost';
+  process.env['APP_REDIS_PORT'] = 3000;
+  var env = new habitat('app');
+  var obj = env.get('redis', { host: 'nope', port: 1e300 });
+  t.same(obj.host, 'localhost');
+  t.same(obj.port, 3000);
+  t.end();
+});
+
 test('habitat#get: should try to expand camelcase', function (t) {
   process.env['APP_REDIS_HOST'] = 'localhost';
   process.env['APP_REDIS_PORT'] = 3000;
