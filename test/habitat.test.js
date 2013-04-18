@@ -187,3 +187,17 @@ test('habitat.load: load some shit in from a file', function (t) {
   t.same(process.env['PARAMETER_TWO'], 'two');
   t.end();
 });
+
+test('habitat.load crash regression: load a file that has blank newlines', function(t) {
+  var path = require('path').join(__dirname, 'env.blank');
+  habitat.load(path);
+  t.ok(true, "habitat didn't crash when loading from file");
+  t.end();
+});
+
+test('habitat.load crash regression: load a file that has comments', function(t) {
+  var path = require('path').join(__dirname, 'env.comments');
+  habitat.load(path);
+  t.ok(true, "habitat didn't crash when loading from file");
+  t.end();
+});
