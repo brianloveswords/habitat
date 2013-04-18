@@ -207,7 +207,9 @@ habitat.load = function load(path) {
   if (!fileExists(path))
     return false;
   var exports = fs.readFileSync(path).toString().split('\n');
-  exports.map(function (param) {
+  exports.filter(function(param) {
+    return !!param.match(/(.+?)=(.*)/);
+  }).map(function (param) {
     var match = param.replace(/^export /i, '').match(/(.+?)=(.*)/);
     var key = match[1];
     var value = match[2];
