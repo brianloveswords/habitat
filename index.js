@@ -87,6 +87,8 @@ habitat.parse = function parse(thing) {
 
 habitat.prototype.set = function set(key, value) {
   var envkey = this.envkey(key);
+  if (typeof value !== 'string' && typeof value !== 'number')
+    value = JSON.stringify(value);
   process.env[envkey] = value;
   return this;
 };
@@ -122,8 +124,8 @@ habitat.prototype.temp = function (obj, callback) {
     callback();
     return reset();
   }
-  if (callback.length === 1)
-    return callback(reset)
+
+  return callback(reset);
 };
 
 

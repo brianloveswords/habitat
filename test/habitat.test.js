@@ -36,6 +36,13 @@ test('habitat#set: set a value', function (t) {
   t.end();
 });
 
+test('habitat#set: set an array value', function (t) {
+  const env = new habitat('habitat');
+  const expect = [1,2,3];
+  env.set('array', expect);
+  t.same(env.get('array'), expect);
+  t.end();
+});
 
 test('habitat#temp: syncronous', function (t) {
   var env = new habitat('habitat');
@@ -49,6 +56,16 @@ test('habitat#temp: syncronous', function (t) {
   });
 
   t.same(env.get('hello'), 'universe');
+  t.end();
+});
+
+test('habitat#temp: with array', function (t) {
+  var env = new habitat('habitat');
+  env.temp({
+    array: [1, 2, 3]
+  }, function () {
+    t.same(env.get('array'), [1, 2, 3]);
+  });
   t.end();
 });
 
