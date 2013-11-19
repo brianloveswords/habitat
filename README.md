@@ -1,5 +1,5 @@
 # habitat [![Build Status](https://secure.travis-ci.org/brianloveswords/habitat.png)](http://travis-ci.org/brianloveswords/habitat)
-## Version 0.4.1
+## Version 1.0.0
 
 Library for managing your environment vars.
 
@@ -108,8 +108,9 @@ var nodeEnv = habitat.get('nodeEnv');
 ```
 
 ## habitat.load([*pathToEnvFile*])
-Try to load a set of environment variables from a file. Will **not**
-overwrite existing environment variables if there is a conflict.
+Try to load a set of environment variables from a file. This **will** override whatever is in the environment.
+
+Environment file can be in the form of exports:
 
 ```bash
 # /some/directory/.env
@@ -120,9 +121,16 @@ export PARAMETER_ONE=one
 export PARAMETER_TWO=two
 ```
 
+It can also take JSON if you're into that:
+
+```json
+{"parameterOne": "one",
+ "parameterTwo": "two"}
+```
+
 ```js
-habitat.load('/some/directory/.env'); // returns true on success
-console.dir(habitat.get('parameter')); // { one: 'one', two: 'two' }
+var env = habitat.load('/some/directory/.env'); // returns true on success
+console.dir(env.get('parameter')); // { one: 'one', two: 'two' }
 ```
 
 `pathToEnvFile` defaults to `'.env'`, which will just look for a .env
@@ -175,7 +183,7 @@ var tempEnv = {
   port: 5000
 };
 
-// sync  
+// sync
 env.temp(tempEnv, function() {
   console.log(env.get('host')) // "lolcathost"
   console.log(process.env['AIRSUPPORT_HOST']) // "lolcathost"

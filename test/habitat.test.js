@@ -198,7 +198,7 @@ test('habitat#get: should try to expand camelcase', function (t) {
 });
 
 test('habitat.load: load some shit in from a file', function (t) {
-  var path = require('path').join(__dirname, '.env');
+  var path = pathutil.join(__dirname, '.env');
   habitat.load(path);
   t.same(process.env['PARAMETER_ONE'], 'one=1');
   t.same(process.env['PARAMETER_TWO'], 'two');
@@ -206,15 +206,23 @@ test('habitat.load: load some shit in from a file', function (t) {
 });
 
 test('habitat.load crash regression: load a file that has blank newlines', function(t) {
-  var path = require('path').join(__dirname, 'env.blank');
-  habitat.load(path);
+  var path = pathutil.join(__dirname, 'env.blank');
+  var env = habitat.load(path);
   t.ok(true, "habitat didn't crash when loading from file");
   t.end();
 });
 
 test('habitat.load crash regression: load a file that has comments', function(t) {
-  var path = require('path').join(__dirname, 'env.comments');
-  habitat.load(path);
+  var path = pathutil.join(__dirname, 'env.comments');
+  var env = habitat.load(path);
   t.ok(true, "habitat didn't crash when loading from file");
+  t.same(env.get('A'), 'B')
+  t.end();
+});
+
+test('habitat.load crash regression: load a json file', function(t) {
+  var path = pathutil.join(__dirname, 'env.json');
+  var env = habitat.load(path);
+  t.same(env.get('oh hey'), {name: "hey", greet: "sup" })
   t.end();
 });

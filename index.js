@@ -1,5 +1,6 @@
-var fs = require('fs');
-var pathutil = require('path');
+const fs = require('fs');
+const xtend = require('xtend')
+const pathutil = require('path');
 
 function habitat(prefix, defaults) {
   if (!(this instanceof habitat))
@@ -208,8 +209,18 @@ habitat.load = function load(path) {
   path = path || '.env';
   if (!fileExists(path))
     return false;
-  var exports = fs.readFileSync(path).toString().split('\n');
-  exports.filter(function(param) {
+  var exports = fs.readFileSync(pathutil.resolve(path)).toString().trim()
+
+  if (exports.indexOf('{') == 0) {
+    try {
+      var params = JSON.parse(exports)
+      process.env = xtend(process.env, upcaseKeys(params))
+    } catch(e) {
+      throw new Error('could not parse environment file, expected json')
+    }
+  }
+
+  exports.split('\n').filter(function(param) {
     return !!param.match(/(.+?)=(.*)/);
   }).map(function (param) {
     var match = param.replace(/^export /i, '').match(/(.+?)=(.*)/);
@@ -219,10 +230,9 @@ habitat.load = function load(path) {
       value = match[1];
     return { key: key, value: value };
   }).forEach(function (param) {
-    if (process.env[param.key]) return;
     process.env[param.key] = param.value;
   });
-  return true;
+  return habitat();
 };
 
 /**
@@ -254,6 +264,14 @@ function fromCamelCase(input) {
 
 function fileExists(path) {
   return (fs.existsSync || pathutil.existsSync)(path);
+}
+
+function upcaseKeys(obj) {
+  const modified = {}
+  Object.keys(obj).forEach(function (key) {
+    modified[fromCamelCase(key).toUpperCase()] = obj[key]
+  })
+  return modified
 }
 
 module.exports = habitat;
