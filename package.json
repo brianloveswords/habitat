@@ -7,7 +7,9 @@
     "test": "test"
   },
   "dependencies": {
-    "xtend": "~2.1.1"
+    "xtend": "~2.1.1",
+    "lodash.foreach": "~2.3.0",
+    "lodash.reduce": "~2.3.0"
   },
   "devDependencies": {
     "tap": "~0.3.1"

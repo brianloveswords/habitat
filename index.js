@@ -1,6 +1,8 @@
 const fs = require('fs');
 const xtend = require('xtend')
 const pathutil = require('path');
+const fromCamelCase = require('./from-camel-case')
+const flatten = require('./flatten')
 
 function habitat(prefix, defaults) {
   if (!(this instanceof habitat))
@@ -213,8 +215,9 @@ habitat.load = function load(path) {
 
   if (exports.indexOf('{') == 0) {
     try {
-      var params = JSON.parse(exports)
-      process.env = xtend(process.env, upcaseKeys(params))
+      var params = flatten(JSON.parse(exports))
+      process.env = xtend(process.env, flatten(params))
+      return habitat;
     } catch(e) {
       throw new Error('could not parse environment file, expected json')
     }
@@ -232,46 +235,17 @@ habitat.load = function load(path) {
   }).forEach(function (param) {
     process.env[param.key] = param.value;
   });
-  return habitat();
-};
 
-/**
- * Shortcut for Object.keys(obj).forEach(fn);
- */
+  return habitat;
+};
 
 function eachKey(obj, fn) {
   return Object.keys(obj).forEach(fn);
 }
 
-/**
- * Convert a camelcased string to an underscored string
- *
- * @param {String} input
- * @return {String} underscored string
- */
-
-function fromCamelCase(input) {
-  var expression = /([a-z])([A-Z])/g;
-  return input.replace(expression, function (_, lower, upper) {
-    return lower + '_' + upper.toLowerCase();
-  });
-}
-
-/**
- * Check file existence.
- * For supporting both node 0.6 and node 0.8
- */
 
 function fileExists(path) {
   return (fs.existsSync || pathutil.existsSync)(path);
-}
-
-function upcaseKeys(obj) {
-  const modified = {}
-  Object.keys(obj).forEach(function (key) {
-    modified[fromCamelCase(key).toUpperCase()] = obj[key]
-  })
-  return modified
 }
 
 module.exports = habitat;

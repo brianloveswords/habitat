@@ -223,6 +223,6 @@ test('habitat.load crash regression: load a file that has comments', function(t)
 test('habitat.load crash regression: load a json file', function(t) {
   var path = pathutil.join(__dirname, 'env.json');
   var env = habitat.load(path);
-  t.same(env.get('oh hey'), {name: "hey", greet: "sup" })
+  t.same(env('db').get('nestedMore'), 'stuff')
   t.end();
 });
