@@ -217,8 +217,8 @@ habitat.load = function load(path) {
 
   if (exports.indexOf('{') == 0) {
     try {
-      var params = flatten(JSON.parse(exports))
-      process.env = xtend(process.env, flatten(params))
+      var params = flatten(JSON.parse(exports));
+      process.env = xtend(params, process.env)
       return habitat;
     } catch(e) {
       throw new Error('could not parse environment file, expected json')
@@ -235,7 +235,9 @@ habitat.load = function load(path) {
       value = match[1];
     return { key: key, value: value };
   }).forEach(function (param) {
-    process.env[param.key] = param.value;
+    if (typeof process.env[param.key] === "undefined") {
+      process.env[param.key] = param.value;
+    }
   });
 
   return habitat;
