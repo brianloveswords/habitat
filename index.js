@@ -66,12 +66,14 @@ habitat.prototype.get = function get(key, someDefault) {
 
 habitat.parse = function parse(thing) {
   var bool = /^(true|false)$/;
-  var number = /^\d+(\.\d+)?$/;
   var json = /^(\{.*?\})|(\[.*?\])$/;
+
   if (bool.test(thing))
     return thing === 'true';
-  if (number.test(thing))
+  if (thing == parseInt(thing, 10))
     return parseInt(thing, 10);
+  if (thing == parseFloat(thing, 10))
+    return parseFloat(thing, 10);
   if (json.test(thing)) {
     try { return JSON.parse(thing) }
     catch(err) { return thing }
