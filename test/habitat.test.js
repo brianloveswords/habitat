@@ -226,3 +226,11 @@ test('habitat.load crash regression: load a json file', function(t) {
   t.same(env('db').get('nestedMore'), 'stuff')
   t.end();
 });
+
+test('habitat regression: parse floats', function(t) {
+  process.env['PI'] = 3.14;
+
+  var env = new habitat();
+  t.same(env.get('PI'), 3.14);
+  t.end();
+});
