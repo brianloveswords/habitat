@@ -112,6 +112,7 @@ test('habitat.parse: parse potential things', function (t) {
   t.same(typeof habitat.parse('3000'), 'number');
   t.same(typeof habitat.parse('12.0'), 'number');
   t.same(typeof habitat.parse('{"hi": "hello"}'), 'object');
+  t.same(typeof habitat.parse(' {"hi": "hello"} '), 'object');
   t.same(habitat.parse('{"hi": "hello"}').hi, 'hello');
   t.same(typeof habitat.parse('[1,2,3]'), 'object');
   t.same(habitat.parse('[1,2,3]')[2], 3);

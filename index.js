@@ -66,7 +66,6 @@ habitat.prototype.get = function get(key, someDefault) {
 
 habitat.parse = function parse(thing) {
   var bool = /^(true|false)$/;
-  var json = /^(\{.*?\})|(\[.*?\])$/;
 
   if (bool.test(thing))
     return thing === 'true';
@@ -74,10 +73,11 @@ habitat.parse = function parse(thing) {
     return parseInt(thing, 10);
   if (thing == parseFloat(thing))
     return parseFloat(thing);
-  if (json.test(thing)) {
-    try { return JSON.parse(thing) }
-    catch(err) { return thing }
-  }
+
+  try {
+    return JSON.parse(thing);
+  } catch(e) {}
+
   return thing;
 };
 
