@@ -235,3 +235,12 @@ test('habitat regression: parse floats', function(t) {
   t.same(env.get('PI'), 3.14);
   t.end();
 });
+
+test('new habitat regression: set defaults', function(t) {
+  var env = habitat('', {
+    'IM-A-DEFAULT': true
+  });
+
+  t.same(env.get('IM-A-DEFAULT'), true);
+  t.end();
+});
