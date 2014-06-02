@@ -72,8 +72,8 @@ habitat.parse = function parse(thing) {
     return thing === 'true';
   if (thing == parseInt(thing, 10))
     return parseInt(thing, 10);
-  if (thing == parseFloat(thing, 10))
-    return parseFloat(thing, 10);
+  if (thing == parseFloat(thing))
+    return parseFloat(thing);
   if (json.test(thing)) {
     try { return JSON.parse(thing) }
     catch(err) { return thing }
