@@ -6,7 +6,7 @@ const flatten = require('./flatten')
 
 function habitat(prefix, defaults) {
   if (!(this instanceof habitat))
-    return new habitat(prefix);
+    return new habitat(prefix, defaults);
   if (prefix)
     this.prefix = prefix.toUpperCase();
   if (defaults)
