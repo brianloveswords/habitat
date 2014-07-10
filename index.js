@@ -209,34 +209,51 @@ habitat.get = function get() {
  * @return {Boolean} true if able to load, false otherwise.
  */
 
-habitat.load = function load(path) {
-  path = path || '.env';
-  if (!fileExists(path))
-    return false;
-  var exports = fs.readFileSync(pathutil.resolve(path)).toString().trim()
+habitat.load = function load() {
+  var paths = Array.prototype.slice.call(arguments, 0),
+      path,
+      exports,
+      params;
 
-  if (exports.indexOf('{') == 0) {
-    try {
-      var params = flatten(JSON.parse(exports))
-      process.env = xtend(process.env, flatten(params))
-      return habitat;
-    } catch(e) {
-      throw new Error('could not parse environment file, expected json')
-    }
+  if (!paths.length){
+    paths.push('.env');
   }
 
-  exports.split('\n').filter(function(param) {
-    return !!param.match(/(.+?)=(.*)/);
-  }).map(function (param) {
-    var match = param.replace(/^export /i, '').match(/(.+?)=(.*)/);
-    var key = match[1];
-    var value = match[2];
-    if ((match = value.match(/^(?:'|")(.*)(?:'|")$/)))
-      value = match[1];
-    return { key: key, value: value };
-  }).forEach(function (param) {
-    process.env[param.key] = param.value;
-  });
+  // First file is mandatory
+  if (!fileExists(paths[0]))
+    return false;
+
+  for (var i = 0; i < paths.length; i++) {
+    path = paths[i];
+    // subsequent files are optional
+    if (!fileExists(path))
+      continue;
+    exports = fs.readFileSync(pathutil.resolve(path)).toString().trim();
+
+    // deal with json
+    if (exports.indexOf('{') == 0) {
+      try {
+        var params = flatten(JSON.parse(exports))
+        process.env = xtend(process.env, flatten(params))
+        continue;
+      } catch(e) {
+        throw new Error('could not parse environment file, expected json')
+      }
+    }
+
+    exports.split('\n').filter(function(param) {
+      return !!param.match(/(.+?)=(.*)/);
+    }).map(function (param) {
+      var match = param.replace(/^export /i, '').match(/(.+?)=(.*)/);
+      var key = match[1];
+      var value = match[2];
+      if ((match = value.match(/^(?:'|")(.*)(?:'|")$/)))
+        value = match[1];
+      return { key: key, value: value };
+    }).forEach(function (param) {
+      process.env[param.key] = param.value;
+    });
+  }
 
   return habitat;
 };
