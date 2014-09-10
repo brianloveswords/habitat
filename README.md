@@ -108,7 +108,17 @@ var nodeEnv = habitat.get('nodeEnv');
 ```
 
 ## habitat.load([*pathToEnvFile*])
-Try to load a set of environment variables from a file. This **will** override whatever is in the environment.
+Try to load a set of environment variables from a file. This **will
+not** override whatever is in the environment. This is a change from
+Habitat v1.x's behaviour. This means that you can chain multiple
+environment files together to provide sane defaults for your local
+development or to commit environment configuration into your repository:
+
+```js
+habitat.load('.env');
+habitat.load('config/production.env');
+habitat.load('config/defaults.env');
+```
 
 Environment file can be in the form of exports:
 
