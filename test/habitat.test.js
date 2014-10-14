@@ -135,13 +135,28 @@ test('habitat#get: defaults', function (t) {
   t.end();
 });
 
-test('habitat#all', function (t) {
+test('habitat#all: should normalize prefixes', function (t) {
   process.env['HABITAT_YEP'] = 'yeah';
   process.env['HABITAT_NOPE'] = 'naw';
+  process.env['HABITAT_TRUTHFUL'] = false;
   var env = new habitat('habitat');
   var obj = env.all();
   t.same(obj.yep, 'yeah');
   t.same(obj.nope, 'naw');
+  t.same(obj.truthful, false);
+  t.end();
+});
+
+test('habitat#all: should return parsed or unparsed values based on params', function (t) {
+  process.env['MEANING'] = 42;
+  process.env['COOL_STUFF'] = true;
+  var env = new habitat();
+  var parsed = env.all();
+  var unparsed = env.all(true);
+  t.same(parsed.MEANING, 42);
+  t.same(parsed.COOL_STUFF, true);
+  t.same(unparsed.MEANING, '42');
+  t.same(unparsed.COOL_STUFF, 'true');
   t.end();
 });
 
