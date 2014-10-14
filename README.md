@@ -154,9 +154,11 @@ Sets an environment variable, with prefix if passed.
 
 Unsets an environment variable
 
-## habitat#all()
+## habitat#all(options)
 
 Get an object with all of the things in the environment.
+
+If `options.raw` is true, returns all values as strings. Otherwise, habitat will try to parse them as `number`, `json`, or `boolean`, as in habitat#get.
 
 Example:
 

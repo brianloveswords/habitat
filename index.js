@@ -156,13 +156,15 @@ habitat.prototype.envkey = function envkey(key) {
  * @return {Object}
  */
 
-habitat.prototype.all = function all() {
+habitat.prototype.all = function all(options) {
+  options = options || {};
   var prefix = this.prefix;
-  if (!prefix) return process.env;
   var keys = this.rawKeys();
-  return keys.reduce(function (obj, key) {
-    var lowerKey = key.replace(prefix + '_', '').toLowerCase();
-    obj[lowerKey] = habitat.parse(process.env[key]);
+  return keys.reduce(function (obj, rawKey) {
+    var key = rawKey;
+    var val = process.env[rawKey];
+    if (prefix) key = rawKey.replace(prefix + '_', '').toLowerCase();
+    obj[key] = options.raw ? val : habitat.parse(val);
     return obj;
   }, {});
 };
