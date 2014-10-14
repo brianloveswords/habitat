@@ -152,7 +152,7 @@ test('habitat#all: should return parsed or unparsed values based on params', fun
   process.env['COOL_STUFF'] = true;
   var env = new habitat();
   var parsed = env.all();
-  var unparsed = env.all(true);
+  var unparsed = env.all({raw: true});
   t.same(parsed.MEANING, 42);
   t.same(parsed.COOL_STUFF, true);
   t.same(unparsed.MEANING, '42');
