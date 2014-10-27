@@ -94,7 +94,6 @@ habitat.prototype.set = function set(key, value) {
   var envkey = this.envkey(key);
   if (typeof value !== 'string' && typeof value !== 'number') {
     if (typeof value === 'object') {
-      console.log('here');
       eachKey(value, function(childKey) {
         this.set(key + '_' + childKey, value[childKey]);
       }.bind(this));
