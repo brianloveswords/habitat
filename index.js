@@ -92,8 +92,14 @@ habitat.parse = function parse(thing) {
 
 habitat.prototype.set = function set(key, value) {
   var envkey = this.envkey(key);
-  if (typeof value !== 'string' && typeof value !== 'number')
+  if (typeof value !== 'string' && typeof value !== 'number') {
+    if (typeof value === 'object') {
+      eachKey(value, function(childKey) {
+        this.set(key + '_' + childKey, value[childKey]);
+      }.bind(this));
+    }
     value = JSON.stringify(value);
+  }
   process.env[envkey] = value;
   return this;
 };

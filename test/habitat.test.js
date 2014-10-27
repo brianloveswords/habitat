@@ -98,6 +98,16 @@ test('habitat constructor: defaults', function (t) {
   t.end();
 });
 
+test('habitat constructor: second-level defaults', function(t) {
+  var env = new habitat('habitat', {
+    parent: {
+      child: 'foo'
+    }
+  });
+  t.same(env.get('parentChild'), 'foo');
+  t.end();
+});
+
 test('habitat#unset', function (t) {
   process.env['HABITAT_WUT'] = 'lol';
   var env = new habitat('habitat');
