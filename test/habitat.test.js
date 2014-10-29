@@ -12,7 +12,7 @@ test('habitat#get: basic test', function (t) {
   t.same(env.get('hello'), 'world');
 
   var env2 = new habitat('HABITAT');
-  t.same(env.get('HELLO'), 'world');
+  t.same(env2.get('HELLO'), 'world');
   t.end();
 });
 
