@@ -16,6 +16,14 @@ test('habitat#get: basic test', function (t) {
   t.end();
 });
 
+test('habitat#get: camelcase prefix', function(t) {
+  process.env['HABITAT_FOO_HELLO'] = 'world';
+
+  var env = new habitat('habitatFoo');
+  t.same(env.get('hello'), 'world');
+  t.end();
+});
+
 test('habitat#get: no prefix', function (t) {
   process.env['SOMETHING'] = 'that thing';
   var env = new habitat();

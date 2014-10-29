@@ -7,8 +7,12 @@ const flatten = require('./flatten')
 function habitat(prefix, defaults) {
   if (!(this instanceof habitat))
     return new habitat(prefix, defaults);
-  if (prefix)
+  if (prefix) {
+    if (prefix.match(/[a-z]+[A-Z]/)) {
+      prefix = fromCamelCase(prefix);
+    }
     this.prefix = prefix.toUpperCase();
+  }
   if (defaults)
     this.defaults = this.setDefaults(defaults);
 };
