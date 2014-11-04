@@ -12,7 +12,15 @@ test('habitat#get: basic test', function (t) {
   t.same(env.get('hello'), 'world');
 
   var env2 = new habitat('HABITAT');
-  t.same(env.get('HELLO'), 'world');
+  t.same(env2.get('HELLO'), 'world');
+  t.end();
+});
+
+test('habitat#get: camelcase prefix', function(t) {
+  process.env['HABITAT_FOO_HELLO'] = 'world';
+
+  var env = new habitat('habitatFoo');
+  t.same(env.get('hello'), 'world');
   t.end();
 });
 
