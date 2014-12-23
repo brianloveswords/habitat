@@ -116,6 +116,20 @@ test('habitat constructor: second-level defaults', function(t) {
   t.end();
 });
 
+test('habitat constructor: partially overwritten second-level defaults', function(t) {
+  process.env['HABITAT_PARENT_SECOND'] = 'overwritten';
+  var env = habitat('habitat', {
+    parent: {
+      first: 'foo',
+      second: 'bar'
+    }
+  });
+  t.same(env.get('parentFirst'), 'foo');
+  t.same(env.get('parentSecond'), 'overwritten');
+  t.end();
+  delete process.env['HABITAT_PARENT_SECOND']
+});
+
 test('habitat#unset', function (t) {
   process.env['HABITAT_WUT'] = 'lol';
   var env = new habitat('habitat');

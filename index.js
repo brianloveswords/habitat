@@ -22,10 +22,19 @@ function habitat(prefix, defaults) {
  * Setup default environment options
  */
 
-habitat.prototype.setDefaults = function setDefaults(defaults) {
+habitat.prototype.setDefaults = function setDefaults(defaults, prefix) {
   eachKey(defaults, function (key) {
-    if (typeof this.get(key) === 'undefined')
-      this.set(key, defaults[key])
+    var prefixedKey = prefixKey(prefix, key);
+    switch (typeof this.get(prefixedKey)) {
+      default:
+        break;
+      case 'undefined':
+        this.set(prefixedKey, defaults[key]);
+        break;
+      case 'object':
+        this.setDefaults(defaults[key], prefixedKey);
+        break;
+    }
   }.bind(this));
   return this;
 };
