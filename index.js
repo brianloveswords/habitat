@@ -3,6 +3,7 @@ const xtend = require('xtend')
 const pathutil = require('path');
 const fromCamelCase = require('./from-camel-case')
 const flatten = require('./flatten')
+const prefixKey = require('./prefix-key');
 
 function habitat(prefix, defaults) {
   if (!(this instanceof habitat))
@@ -99,7 +100,7 @@ habitat.prototype.set = function set(key, value) {
   if (typeof value !== 'string' && typeof value !== 'number') {
     if (typeof value === 'object') {
       eachKey(value, function(childKey) {
-        this.set(key + '_' + childKey, value[childKey]);
+        this.set(prefixKey(key, childKey), value[childKey]);
       }.bind(this));
     }
     value = JSON.stringify(value);
