@@ -149,6 +149,7 @@ test('habitat#get: array parsing', function (t) {
 test('habitat#get: defaults', function (t) {
   var env = new habitat('noexist');
   t.same(env.get('port', 3000), 3000);
+  t.same(env.get('redisPort', 6379), 6379);
   t.same(env.get('yayay'), undefined);
   t.end();
 });

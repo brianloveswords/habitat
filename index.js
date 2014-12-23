@@ -41,7 +41,7 @@ habitat.prototype.setDefaults = function setDefaults(defaults) {
 habitat.prototype.get = function get(key, someDefault) {
   var value, envkey;
   if (key.match(/[a-z]+[A-Z]/))
-    return this.get(fromCamelCase(key));
+    return this.get(fromCamelCase(key), someDefault);
 
   envkey = this.envkey(key);
   value = process.env[envkey];
