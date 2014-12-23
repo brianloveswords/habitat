@@ -3,6 +3,7 @@ const xtend = require('xtend')
 const pathutil = require('path');
 const fromCamelCase = require('./from-camel-case')
 const flatten = require('./flatten')
+const prefixKey = require('./prefix-key');
 
 function habitat(prefix, defaults) {
   if (!(this instanceof habitat))
@@ -21,10 +22,19 @@ function habitat(prefix, defaults) {
  * Setup default environment options
  */
 
-habitat.prototype.setDefaults = function setDefaults(defaults) {
+habitat.prototype.setDefaults = function setDefaults(defaults, prefix) {
   eachKey(defaults, function (key) {
-    if (typeof this.get(key) === 'undefined')
-      this.set(key, defaults[key])
+    var prefixedKey = prefixKey(prefix, key);
+    switch (typeof this.get(prefixedKey)) {
+      default:
+        break;
+      case 'undefined':
+        this.set(prefixedKey, defaults[key]);
+        break;
+      case 'object':
+        this.setDefaults(defaults[key], prefixedKey);
+        break;
+    }
   }.bind(this));
   return this;
 };
@@ -41,7 +51,7 @@ habitat.prototype.setDefaults = function setDefaults(defaults) {
 habitat.prototype.get = function get(key, someDefault) {
   var value, envkey;
   if (key.match(/[a-z]+[A-Z]/))
-    return this.get(fromCamelCase(key));
+    return this.get(fromCamelCase(key), someDefault);
 
   envkey = this.envkey(key);
   value = process.env[envkey];
@@ -99,7 +109,7 @@ habitat.prototype.set = function set(key, value) {
   if (typeof value !== 'string' && typeof value !== 'number') {
     if (typeof value === 'object') {
       eachKey(value, function(childKey) {
-        this.set(key + '_' + childKey, value[childKey]);
+        this.set(prefixKey(key, childKey), value[childKey]);
       }.bind(this));
     }
     value = JSON.stringify(value);

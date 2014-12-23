@@ -1,13 +1,13 @@
 const fromCamelCase = require('./from-camel-case')
 const reduce = require('lodash.reduce')
 const xtend = require('xtend')
+const prefixKey = require('./prefix-key')
 
 module.exports = function flatten(obj, prefix) {
   prefix = prefix || ''
 
   function makeKey(s) {
-    if (!prefix) return s
-    return prefix + '_' + s
+    return prefixKey(prefix, s)
   }
 
   return reduce(obj, function (result, val, key) {
