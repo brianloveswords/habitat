@@ -1,3 +1,7 @@
+3.1.1 / 2014-12-23
+==================
+
+  * Fix a problem with camelCase key and default value and with partially overwritten defaults
 
 3.0.1 / 2014-10-27
 ==================
