@@ -1,4 +1,4 @@
-var prefixKey = require('../prefix-key');
+var prefixKey = require('../lib/prefix-key');
 var test = require('tap').test;
 
 test('prefix-key: with null prefix', function(t) {
