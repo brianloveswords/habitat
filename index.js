@@ -1,9 +1,9 @@
 const fs = require('fs');
 const xtend = require('xtend')
 const pathutil = require('path');
-const fromCamelCase = require('./from-camel-case')
-const flatten = require('./flatten')
-const prefixKey = require('./prefix-key');
+const fromCamelCase = require('./lib/from-camel-case')
+const flatten = require('./lib/flatten')
+const prefixKey = require('./lib/prefix-key');
 
 function habitat(prefix, defaults) {
   if (!(this instanceof habitat))

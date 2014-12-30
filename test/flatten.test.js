@@ -1,5 +1,5 @@
 const test = require('tap').test
-const flatten = require('../flatten')
+const flatten = require('../lib/flatten')
 
 test('flattening', function (t) {
   t.same(
