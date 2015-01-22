@@ -42,6 +42,8 @@ environment variables.
 found in the environment. This should be used sparingly.
 
 ```js
+var habitat = require('habitat')
+habitat.load()
 var env = new habitat('airsupport', { port: 1024 })
 // will try the environment first, then fall back to 1024
 var port = env.get('port');
@@ -59,6 +61,8 @@ like a `boolean`, `number` or `json`, so you can do things like this:
 export APP_ADMINS='["me@example.com", "you@example.com"]'
 ```
 ```js
+var habitat = require('habitat')
+habitat.load()
 var env = new habitat('app');
 var admins = env.get('admins');
 console.log(admins.indexOf('you@example.com')) // 1
@@ -77,6 +81,8 @@ export APP_REDIS_PORT=6379
 ```
 
 ```js
+var habitat = require('habitat')
+habitat.load()
 var env = new habitat('app');
 var db = env.get('db');
 var options = env.get(db);
@@ -93,6 +99,8 @@ export APP_SOME_LONG_KEY='great'
 ```
 
 ```js
+var habitat = require('habitat')
+habitat.load()
 var env = new habitat('app');
 console.log(env.get('someLongKey')) // 'great'
 ```
@@ -103,6 +111,8 @@ You can also use `get` directly from the habitat object to get
 unprefixed things from the environment.
 
 ```js
+var habitat = require('habitat')
+habitat.load()
 var path = habitat.get('path');
 var nodeEnv = habitat.get('nodeEnv');
 ```
