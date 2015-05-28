@@ -105,6 +105,8 @@ habitat.parse = function parse(thing) {
  */
 
 habitat.prototype.set = function set(key, value) {
+  if (key.match(/[a-z]+[A-Z]/))
+    return this.set(fromCamelCase(key), value);
   var envkey = this.envkey(key);
   if (typeof value !== 'string' && typeof value !== 'number') {
     if (typeof value === 'object') {
