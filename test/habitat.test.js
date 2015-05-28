@@ -52,6 +52,13 @@ test('habitat#set: set an array value', function (t) {
   t.end();
 });
 
+test('habitat#set: set a value with camelcase key', function (t) {
+  var env = new habitat('setCamelcase');
+  env.set('camelCase', 'foo');
+  t.same(env.get('camelCase'), 'foo');
+  t.end();
+});
+
 test('habitat#temp: syncronous', function (t) {
   var env = new habitat('habitat');
   process.env['HABITAT_HELLO'] = 'universe';
@@ -128,6 +135,38 @@ test('habitat constructor: partially overwritten second-level defaults', functio
   t.same(env.get('parentSecond'), 'overwritten');
   t.end();
   delete process.env['HABITAT_PARENT_SECOND']
+});
+
+test('habitat constructor: camelcase defaults', function (t) {
+  var env = new habitat('camelCaseDefaults', {
+    camelCase: 'foo'
+  });
+  t.same(env.get('camelCase'), 'foo');
+  t.end();
+});
+
+test('habitat constructor: second-level camelcase defaults', function (t) {
+  var env = new habitat('secondLevelCamelCaseDefaults', {
+    parentKey: {
+      child: 'foo'
+    }
+  });
+  t.same(env.get('parentKeyChild'), 'foo');
+  t.end();
+});
+
+test('habitat constructor: partially overwritten second-level camelcase defaults', function (t) {
+  process.env['PARTIALLY_OVERWRITTEN_SECOND_LEVEL_CAMEL_CASE_PARENT_KEY_SECOND_CHILD'] = 'overwritten';
+  var env = new habitat('partiallyOverwrittenSecondLevelCamelCase', {
+    parentKey: {
+      firstChild: 'foo',
+      secondChild: 'bar'
+    }
+  });
+  t.same(env.get('parentKeyFirstChild'), 'foo');
+  t.same(env.get('parentKeySecondChild'), 'overwritten');
+  t.end();
+  delete process.env['PARTIALLY_OVERWRITTEN_SECOND_LEVEL_CAMEL_CASE_PARENT_KEY_SECOND_CHILD'];
 });
 
 test('habitat#unset', function (t) {
